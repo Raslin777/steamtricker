@@ -7,8 +7,85 @@
 #include <stdio.h>
 #include <inttypes.h>
 
-#define STUB() { fprintf(stderr, "[SteamAPI][STUB] %s\n", __PRETTY_FUNCTION__); }
-#define LOG(FORMAT, ...) { fprintf(stderr, "[SteamAPI] " FORMAT "\n", __VA_ARGS__); }
+
+// FIXME
+// FIXME
+// FIXME
+// FIXME
+// FIXME
+class ISteamScreenshots{};
+class CSteamScreenshots : public ISteamScreenshots {
+  public:
+	static CSteamScreenshots& getInstance() {
+		static CSteamScreenshots instance;
+		return instance;
+	}
+};
+class ISteamHTTP{};
+class CSteamHTTP : public ISteamHTTP {
+  public:
+	static CSteamHTTP& getInstance() {
+		static CSteamHTTP instance;
+		return instance;
+	}
+};
+class ISteamUnifiedMessages{};
+class CSteamUnifiedMessages : public ISteamUnifiedMessages {
+  public:
+	static CSteamUnifiedMessages& getInstance() {
+		static CSteamUnifiedMessages instance;
+		return instance;
+	}
+};
+class ISteamController{};
+class CSteamController : public ISteamController {
+  public:
+	static CSteamController& getInstance() {
+		static CSteamController instance;
+		return instance;
+	}
+};
+class ISteamUGC{};
+class CSteamUGC : public ISteamUGC {
+  public:
+	static CSteamUGC& getInstance() {
+		static CSteamUGC instance;
+		return instance;
+	}
+};
+class ISteamAppList{};
+class CSteamAppList : public ISteamAppList {
+  public:
+	static CSteamAppList& getInstance() {
+		static CSteamAppList instance;
+		return instance;
+	}
+};
+class ISteamMusic{};
+class CSteamMusic : public ISteamMusic {
+  public:
+	static CSteamMusic& getInstance() {
+		static CSteamMusic instance;
+		return instance;
+	}
+};
+class ISteamMusicRemote{};
+class CSteamMusicRemote : public ISteamMusicRemote {
+  public:
+	static CSteamMusicRemote& getInstance() {
+		static CSteamMusicRemote instance;
+		return instance;
+	}
+};
+class ISteamHTMLSurface{};
+class CSteamHTMLSurface : public ISteamHTMLSurface {
+  public:
+	static CSteamHTMLSurface& getInstance() {
+		static CSteamHTMLSurface instance;
+		return instance;
+	}
+};
+
 
 typedef uint64_t uint64;
 typedef uint32_t uint32;
@@ -30,14 +107,27 @@ typedef uint32 NetListenSocket;
 typedef uint32 AuthTicket;
 typedef uint64 SteamLeaderboard;
 typedef uint64 SteamLeaderboardEntries;
+typedef uint64 UGCHandle;
+typedef uint64 UGCFileWriteStreamHandle;
+typedef uint64 PublishedFileId;
+typedef uint64 PublishedFileUpdateHandle;
+typedef uint32 DepotId;
 
 typedef int ServerQuery;
 typedef void* ServerListRequest;
 
 const SteamAPICall SteamAPICallInvalid = 0;
+const UGCFileWriteStreamHandle UGCFileStreamHandleInvalid = -1;
+const UGCHandle UGCHandleInvalid = -1;
+const PublishedFileUpdateHandle PublishedFileUpdateHandleInvalid = -1;
 const AppId AppIdInvalid = 0;
 
 extern "C" typedef void (*SteamAPIWarningMessageHook)(int, const char *);
+extern "C" typedef void (*SteamAPI_PostAPIResultInProcess)(SteamAPICall callHandle,
+															void *,
+															uint32 callbackSize,
+															int callbackNum);
+extern "C" typedef uint32 (*SteamAPI_CheckCallbackRegistered)(int callbackNum);
 
 
 enum Result
@@ -267,11 +357,34 @@ enum LeaderboardUploadScoreMethod {
 	LeaderboardUploadScoreMethodForceUpdate = 2
 };
 
+enum P2PSessionError {
+	P2PSessionErrorNone = 0,
+	P2PSessionErrorNotRunningApp = 1,
+	P2PSessionErrorNoRightsToApp = 2,
+	P2PSessionErrorDestinationNotLoggedIn = 3,
+	P2PSessionErrorTimeout = 4,
+	P2PSessionErrorMax = 5
+};
+
 enum P2PSendType {
 	P2PSendUnreliable = 0,
 	P2PSendUnreliableNoDelay = 1,
 	P2PSendReliable = 2,
 	P2PSendReliableWithBuffering = 3
+};
+
+enum SNetSocketState {
+	SNetSocketStateInvalid = 0,
+	SNetSocketStateConnected = 1,
+	SNetSocketStateInitiated = 10,
+	SNetSocketStateLocalCandidatesFound = 11,
+	SNetSocketStateReceivedRemoteCandidates = 12,
+	SNetSocketStateChallengeHandshake = 15,
+	SNetSocketStateDisconnecting = 21,
+	SNetSocketStateLocalDisconnect = 22,
+	SNetSocketStateTimeoutDuringConnect = 23,
+	SNetSocketStateRemoteEndDisconnected = 24,
+	SNetSocketStateConnectionBroken = 25
 };
 
 enum DenyReason {
@@ -303,6 +416,241 @@ enum AuthSessionResponse {
 	AuthSessionResponseAuthTicketCanceled = 6,
 	AuthSessionResponseAuthTicketInvalidAlreadyUsed = 7,
 	AuthSessionResponseAuthTicketInvalid = 8
+};
+
+enum RegisterActivationCodeResult {
+	RegisterActivationCodeResultOK = 0,
+	RegisterActivationCodeResultFail = 1,
+	RegisterActivationCodeResultAlreadyRegistered = 2,
+	RegisterActivationCodeResultTimeout = 3,
+	RegisterActivationCodeAlreadyOwned = 4
+};
+
+enum UserRestriction {
+	UserRestrictionNone = 0,
+	UserRestrictionUnknown = 1,
+	UserRestrictionAnyChat = 2,
+	UserRestrictionVoiceChat = 4,
+	UserRestrictionGroupChat = 8,
+	UserRestrictionRating = 16,
+	UserRestrictionGameInvites = 32,
+	UserRestrictionTrading = 64
+};
+
+enum OverlayToStoreFlag {
+	OverlayToStoreFlag_None = 0,
+	OverlayToStoreFlag_AddToCart = 1,
+	OverlayToStoreFlag_AddToCartAndShow = 2
+};
+
+enum FriendFlags {
+	FriendFlagNone = 0x00,
+	FriendFlagBlocked = 0x01,
+	FriendFlagFriendshipRequested = 0x02,
+	FriendFlagImmediate = 0x04,
+	FriendFlagClanMember = 0x08,
+	FriendFlagOnGameServer = 0x10,
+	FriendFlagHasPlayedWith = 0x20,
+	FriendFlagFriendOfFriend = 0x40,
+	FriendFlagRequestingFriendship = 0x80,
+	FriendFlagRequestingInfo = 0x100,
+	FriendFlagIgnored = 0x200,
+	FriendFlagIgnoredFriend = 0x400,
+	FriendFlagSuggested = 0x800,
+	FriendFlagAll = 0xFFFF,
+};
+
+enum PersonaChange {
+	PersonaChangeName = 0x0001,
+	PersonaChangeStatus = 0x0002,
+	PersonaChangeComeOnline = 0x0004,
+	PersonaChangeGoneOffline = 0x0008,
+	PersonaChangeGamePlayed = 0x0010,
+	PersonaChangeGameServer = 0x0020,
+	PersonaChangeAvatar = 0x0040,
+	PersonaChangeJoinedSource= 0x0080,
+	PersonaChangeLeftSource = 0x0100,
+	PersonaChangeRelationshipChanged = 0x0200,
+	PersonaChangeNameFirstSet = 0x0400,
+	PersonaChangeFacebookInfo = 0x0800,
+	PersonaChangeNickname = 0x1000,
+	PersonaChangeSteamLevel = 0x2000
+};
+
+enum AppReleaseState {
+	AppReleaseState_Unknown = 0,
+	AppReleaseState_Unavailable = 1,
+	AppReleaseState_Prerelease = 2,
+	AppReleaseState_PreloadOnly = 3,
+	AppReleaseState_Released = 4
+};
+
+enum AppOwnershipFlags {
+	AppOwnershipFlags_None = 0x0000,
+	AppOwnershipFlags_OwnsLicense = 0x0001,
+	AppOwnershipFlags_FreeLicense = 0x0002,
+	AppOwnershipFlags_RegionRestricted = 0x0004,
+	AppOwnershipFlags_LowViolence = 0x0008,
+	AppOwnershipFlags_InvalidPlatform = 0x0010,
+	AppOwnershipFlags_SharedLicense = 0x0020,
+	AppOwnershipFlags_FreeWeekend = 0x0040,
+	AppOwnershipFlags_RetailLicense = 0x0080,
+	AppOwnershipFlags_LicenseLocked = 0x0100,
+	AppOwnershipFlags_LicensePending = 0x0200,
+	AppOwnershipFlags_LicenseExpired = 0x0400,
+	AppOwnershipFlags_LicensePermanent = 0x0800,
+	AppOwnershipFlags_LicenseRecurring = 0x1000,
+	AppOwnershipFlags_LicenseCanceled = 0x2000
+};
+
+enum AppType {
+	AppType_Invalid = 0x000,
+	AppType_Game = 0x001,
+	AppType_Application = 0x002,
+	AppType_Tool = 0x004,
+	AppType_Demo = 0x008,
+	AppType_Media_DEPRECATED = 0x010,
+	AppType_DLC = 0x020,
+	AppType_Guide = 0x040,
+	AppType_Driver = 0x080,
+	AppType_Config = 0x100,
+	AppType_Film = 0x200,
+	AppType_TVSeries = 0x400,
+	AppType_Video = 0x800,
+	AppType_Plugin = 0x1000,
+	AppType_Music = 0x2000,
+	AppType_Shortcut = 0x40000000,
+	AppType_DepotOnly = 0x80000000
+};
+
+enum SteamUserStatType {
+	SteamUserStatTypeINVALID = 0,
+	SteamUserStatTypeINT = 1,
+	SteamUserStatTypeFLOAT = 2,
+	SteamUserStatTypeAVGRATE = 3,
+	SteamUserStatTypeACHIEVEMENTS = 4,
+	SteamUserStatTypeGROUPACHIEVEMENTS = 5,
+	SteamUserStatTypeMAX
+};
+
+enum ChatRoomEnterResponse {
+	ChatRoomEnterResponseSuccess = 1,
+	ChatRoomEnterResponseDoesntExist = 2,
+	ChatRoomEnterResponseNotAllowed = 3,
+	EChatRoomEnterResponseFull = 4,
+	ChatRoomEnterResponseError = 5,
+	ChatRoomEnterResponseBanned = 6,
+	ChatRoomEnterResponseLimited = 7,
+	ChatRoomEnterResponseClanDisabled = 8,
+	ChatRoomEnterResponseCommunityBan = 9,
+	ChatRoomEnterResponseMemberBlockedYou = 10,
+	ChatRoomEnterResponseYouBlockedMember = 11,
+	ChatRoomEnterResponseNoRankingDataLobby = 12,
+	ChatRoomEnterResponseNoRankingDataUser = 13,
+	ChatRoomEnterResponseRankOutOfRange = 14
+};
+
+enum MarketingMessageFlags {
+	MarketingMessageFlagsNone = 0,
+	MarketingMessageFlagsHighPriority = 1 << 0,
+	MarketingMessageFlagsPlatformWindows = 1 << 1,
+	MarketingMessageFlagsPlatformMac = 1 << 2,
+	MarketingMessageFlagsPlatformLinux = 1 << 3,
+	MarketingMessageFlagsPlatformRestrictions =
+		MarketingMessageFlagsPlatformWindows |
+		MarketingMessageFlagsPlatformMac |
+		MarketingMessageFlagsPlatformLinux,
+};
+
+enum ResolveConflict {
+	ResolveConflictKeepClient = 1,
+	ResolveConflictKeepServer = 2
+};
+
+enum RemoteStoragePlatform {
+	RemoteStoragePlatformNone = 0,
+	RemoteStoragePlatformWindows = (1 << 0),
+	RemoteStoragePlatformOSX = (1 << 1),
+	RemoteStoragePlatformPS3 = (1 << 2),
+	RemoteStoragePlatformLinux = (1 << 3),
+	RemoteStoragePlatformReserved2 = (1 << 4),
+	RemoteStoragePlatformAll = 0xffffffff
+};
+
+enum RemoteStoragePublishedFileVisibility {
+	RemoteStoragePublishedFileVisibilityPublic = 0,
+	RemoteStoragePublishedFileVisibilityFriendsOnly = 1,
+	RemoteStoragePublishedFileVisibilityPrivate = 2
+};
+
+enum WorkshopFileType {
+	WorkshopFileTypeFirst = 0,
+	WorkshopFileTypeCommunity = 0,
+	WorkshopFileTypeMicrotransaction = 1,
+	WorkshopFileTypeCollection = 2,
+	WorkshopFileTypeArt = 3,
+	WorkshopFileTypeVideo = 4,
+	WorkshopFileTypeScreenshot = 5,
+	WorkshopFileTypeGame = 6,
+	WorkshopFileTypeSoftware = 7,
+	WorkshopFileTypeConcept = 8,
+	WorkshopFileTypeWebGuide = 9,
+	WorkshopFileTypeIntegratedGuide = 10,
+	WorkshopFileTypeMerch = 11,
+	WorkshopFileTypeControllerBinding = 12,
+	WorkshopFileTypeSteamworksAccessInvite = 13,
+	WorkshopFileTypeSteamVideo = 14,
+	WorkshopFileTypeMax = 15
+};
+
+enum WorkshopVote {
+	WorkshopVoteUnvoted = 0,
+	WorkshopVoteFor = 1,
+	WorkshopVoteAgainst = 2
+};
+
+enum WorkshopFileAction {
+	WorkshopFileActionPlayed = 0,
+	WorkshopFileActionCompleted = 1
+};
+
+enum WorkshopEnumerationType {
+	WorkshopEnumerationTypeRankedByVote = 0,
+	WorkshopEnumerationTypeRecent = 1,
+	WorkshopEnumerationTypeTrending = 2,
+	WorkshopEnumerationTypeFavoritesOfFriends = 3,
+	WorkshopEnumerationTypeVotedByFriends = 4,
+	WorkshopEnumerationTypeContentByFriends = 5,
+	WorkshopEnumerationTypeRecentFromFollowedUsers = 6
+};
+
+enum WorkshopVideoProvider {
+	WorkshopVideoProviderNone = 0,
+	WorkshopVideoProviderYoutube = 1
+};
+
+enum UGCReadAction {
+	UGCRead_ContinueReadingUntilFinished = 0,
+	UGCRead_ContinueReading = 1,
+	UGCRead_Close = 2
+};
+
+enum GamepadTextInputMode {
+	GamepadTextInputModeNormal = 0,
+	GamepadTextInputModePassword = 1
+};
+
+enum GamepadTextInputLineMode {
+	GamepadTextInputLineModeSingleLine = 0,
+	GamepadTextInputLineModeMultipleLines = 1
+};
+
+enum CheckFileSignatureEnum {
+	CheckFileSignatureInvalidSignature = 0,
+	CheckFileSignatureValidSignature = 1,
+	CheckFileSignatureFileNotFound = 2,
+	CheckFileSignatureNoSignaturesFoundForThisApp = 3,
+	CheckFileSignatureNoSignaturesFoundForThisFile = 4,
 };
 
 const int SteamAccountInstanceMask = 0x000FFFFF;
@@ -772,6 +1120,17 @@ struct LeaderboardEntry {
 	int32 mScore;
 	int32 mDetails;
 };
+
+struct FriendSessionStateInfo {
+	uint32 mOnlineSessionInstances;
+	uint8 mPublishedToFriendsSessionInstance;
+};
+
+struct SteamParamStringArray {
+	const char **mStrings;
+	int32 mNumStrings;
+};
+
 #pragma pack(pop)
 
 

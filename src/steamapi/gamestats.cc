@@ -1,4 +1,4 @@
-
+#include "api.h"
 #include "gamestats.h"
 
 SteamAPICall CSteamGameStats::GetNewSession(int8 accountType,

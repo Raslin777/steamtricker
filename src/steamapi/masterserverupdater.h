@@ -3,6 +3,10 @@
 
 #include "types.h"
 
+/*
+FIXME: this doesn't seem to get used anywhere
+*/
+
 class ISteamMasterServerUpdater {
 public:
 	virtual void SetActive(bool active) = 0;

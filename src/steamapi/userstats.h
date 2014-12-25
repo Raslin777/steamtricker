@@ -3,6 +3,9 @@
 
 #include "types.h"
 
+/**
+ * interface for SteamUserStats version 011
+ */
 class ISteamUserStats {
 public:
 	virtual bool RequestCurrentStats() = 0;
@@ -39,6 +42,10 @@ public:
 	virtual bool IndicateAchievementProgress(const char *name,
 						 uint32 curProgress,
 						 uint32 maxProgress) = 0;
+
+	virtual uint32 GetNumAchievements() = 0;
+
+	virtual const char *GetAchievementName(uint32 achievement) = 0;
 
 	virtual SteamAPICall RequestUserStats(CSteamID steamIDUser) = 0;
 
@@ -84,6 +91,11 @@ public:
 		int rangeStart,
 		int rangeEnd) = 0;
 
+	virtual SteamAPICall DownloadLeaderboardEntriesForUsers(
+		SteamLeaderboard steamLeaderboard,
+		CSteamID *users,
+		int cUsers) = 0;
+
 	virtual bool GetDownloadedLeaderboardEntry(
 		SteamLeaderboardEntries steamLeaderboardEntries,
 		int index,
@@ -98,7 +110,51 @@ public:
 		const int32 *scoreDetails,
 		int scoreDetailsCount) = 0;
 
+	virtual SteamAPICall AttachLeaderboardUGC(
+		SteamLeaderboard steamLeaderboard,
+		UGCHandle UGC) = 0;
+
 	virtual SteamAPICall GetNumberOfCurrentPlayers() = 0;
+
+	virtual SteamAPICall RequestGlobalAchievementPercentages() = 0;
+
+	virtual int GetMostAchievedAchievementInfo(
+		char *name,
+		uint32 nameBufLen,
+		float *percent,
+		bool *achieved) = 0;
+
+	virtual int GetNextMostAchievedAchievementInfo(
+		int iteratorPrevious,
+		char *name,
+		uint32 nameBufLen,
+		float *percent,
+		bool *achieved) = 0;
+
+	virtual bool GetAchievementAchievedPercent(
+		const char *name,
+		float *percent) = 0;
+
+	virtual SteamAPICall RequestGlobalStats(
+		int historyDays) = 0;
+
+	virtual bool GetGlobalStat(
+		const char *statName,
+		int64 *data) = 0;
+
+	virtual bool GetGlobalStat(
+		const char *statName,
+		double *data) = 0;
+
+	virtual int32 GetGlobalStatHistory(
+		const char *statName,
+		int64 *data,
+		uint32 datai) = 0;
+
+	virtual int32 GetGlobalStatHistory(
+		const char *statName,
+		double *data,
+		uint32 datai) = 0;
 };
 
 class CSteamUserStats : public ISteamUserStats {
@@ -143,6 +199,10 @@ public:
 					 uint32 curProgress,
 					 uint32 maxProgress);
 
+	uint32 GetNumAchievements();
+
+	const char *GetAchievementName(uint32 achievement);
+
 	SteamAPICall RequestUserStats(CSteamID steamIDUser);
 
 	bool GetUserStat(CSteamID steamIDUser, const char *name, int32 *data);
@@ -183,6 +243,11 @@ public:
 		int rangeStart,
 		int rangeEnd);
 
+	SteamAPICall DownloadLeaderboardEntriesForUsers(
+		SteamLeaderboard steamLeaderboard,
+		CSteamID *users,
+		int cUsers);
+
 	bool GetDownloadedLeaderboardEntry(
 		SteamLeaderboardEntries steamLeaderboardEntries,
 		int index,
@@ -197,7 +262,51 @@ public:
 		const int32 *scoreDetails,
 		int scoreDetailsCount);
 
+	SteamAPICall AttachLeaderboardUGC(
+		SteamLeaderboard steamLeaderboard,
+		UGCHandle UGC);
+
 	SteamAPICall GetNumberOfCurrentPlayers();
+
+	SteamAPICall RequestGlobalAchievementPercentages();
+
+	int GetMostAchievedAchievementInfo(
+		char *name,
+		uint32 nameBufLen,
+		float *percent,
+		bool *achieved);
+
+	int GetNextMostAchievedAchievementInfo(
+		int iteratorPrevious,
+		char *name,
+		uint32 nameBufLen,
+		float *percent,
+		bool *achieved);
+
+	bool GetAchievementAchievedPercent(
+		const char *name,
+		float *percent);
+
+	SteamAPICall RequestGlobalStats(
+		int historyDays);
+
+	bool GetGlobalStat(
+		const char *statName,
+		int64 *data);
+
+	bool GetGlobalStat(
+		const char *statName,
+		double *data);
+
+	int32 GetGlobalStatHistory(
+		const char *statName,
+		int64 *data,
+		uint32 datai);
+
+	int32 GetGlobalStatHistory(
+		const char *statName,
+		double *data,
+		uint32 datai);
 
 	static SteamLeaderboard mLastLeaderboard;
 };

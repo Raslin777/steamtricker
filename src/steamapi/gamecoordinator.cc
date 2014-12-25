@@ -1,3 +1,4 @@
+#include "api.h"
 #include "gamecoordinator.h"
 
 GameCoordResult CSteamGameCoordinator::SendMessage(uint32 msgType,

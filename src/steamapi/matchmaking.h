@@ -182,6 +182,9 @@ public:
 	virtual void RulesRefreshComplete() = 0;
 };
 
+/**
+ * interface for SteamMatchmaking version 009
+ */
 class ISteamMatchmaking {
 public:
 	virtual int GetFavoriteGameCount() = 0;
@@ -225,6 +228,8 @@ public:
 	virtual void AddRequestLobbyListDistanceFilter(LobbyDistanceFilter lobbyDistanceFilter) = 0;
 
 	virtual void AddRequestLobbyListResultCountFilter(int maxResults) = 0;
+
+	virtual void AddRequestLobbyListCompatibleMembersFilter(CSteamID steamIDLobby) = 0;
 
 	virtual CSteamID GetLobbyByIndex(int lobby) = 0;
 
@@ -299,10 +304,14 @@ public:
 	virtual CSteamID GetLobbyOwner(CSteamID steamIDLobby) = 0;
 
 	virtual bool SetLobbyOwner(CSteamID steamIDLobby, CSteamID steamIDNewOwner) = 0;
+
+	virtual bool SetLinkedLobby(CSteamID steamIDLobby, CSteamID steamIDLobbyDependent) = 0;
 };
 
 
-
+/**
+ * interface for SteamMatchMakingServers version 002
+ */
 class ISteamMatchmakingServers {
 public:
 	virtual ServerListRequest RequestInternetServerList(
@@ -417,6 +426,8 @@ public:
 
 	void AddRequestLobbyListResultCountFilter(int maxResults);
 
+	void AddRequestLobbyListCompatibleMembersFilter(CSteamID steamIDLobby);
+
 	CSteamID GetLobbyByIndex(int lobby);
 
 	SteamAPICall CreateLobby(LobbyType lobbyType, int maxMembers);
@@ -490,6 +501,8 @@ public:
 	CSteamID GetLobbyOwner(CSteamID steamIDLobby);
 
 	bool SetLobbyOwner(CSteamID steamIDLobby, CSteamID steamIDNewOwner);
+
+	bool SetLinkedLobby(CSteamID steamIDLobby, CSteamID steamIDLobbyDependent);
 };
 
 class CSteamMatchmakingServers : public ISteamMatchmakingServers {

@@ -3,6 +3,10 @@
 
 #include "types.h"
 
+/*
+FIXME: this doesn't seem to get used anywhere
+*/
+
 class ISteamGameCoordinator {
 public:
 	virtual GameCoordResult SendMessage(uint32 msgType,

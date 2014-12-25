@@ -3,6 +3,9 @@
 
 #include "types.h"
 
+/**
+ * interface for SteamNetworking version 005
+ */
 class ISteamNetworking {
 public:
 	virtual bool SendP2PPacket(CSteamID steamIDRemote,
@@ -21,8 +24,14 @@ public:
 
 	virtual bool CloseP2PSessionWithUser(CSteamID steamIDRemote) = 0;
 
+	//FIXME
+	virtual bool CloseP2PChannelWithUser(CSteamID steamIDRemote, int channel) = 0;
+
 	virtual bool GetP2PSessionState(CSteamID steamIDRemote,
 				P2PSessionState *connectionState) = 0;
+
+	//FIXME
+	virtual bool AllowP2PPacketRelay(bool allow) = 0;
 
 	virtual NetListenSocket CreateListenSocket(int virtualP2PPort,
 					   uint32 ip,
@@ -102,8 +111,14 @@ public:
 
 	bool CloseP2PSessionWithUser(CSteamID steamIDRemote);
 
+	//FIXME
+	bool CloseP2PChannelWithUser(CSteamID steamIDRemote, int channel);
+
 	bool GetP2PSessionState(CSteamID steamIDRemote,
 				P2PSessionState *connectionState);
+
+	//FIXME
+	bool AllowP2PPacketRelay(bool allow);
 
 	NetListenSocket CreateListenSocket(int virtualP2PPort,
 					   uint32 ip,

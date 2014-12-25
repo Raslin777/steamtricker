@@ -22,7 +22,32 @@ enum {
 	SteamGameServerStatsCallbacks = 1800,
 	Steam2AsyncCallbacks = 1900,
 	SteamGameStatsCallbacks = 2000,
-	ClientHTTPCallbacks = 2100
+	ClientHTTPCallbacks = 2100,
+	ClientScreenshotsCallbacks = 2200,
+	SteamScreenshotsCallbacks = 2300,
+	ClientAudioCallbacks = 2400,
+	ClientUnifiedMessagesCallbacks = 2500,
+	SteamStreamLauncherCallbacks = 2600,
+	ClientControllerCallbacks = 2700,
+	SteamControllerCallbacks = 2800,
+	ClientParentalSettingsCallbacks = 2900,
+	ClientDeviceAuthCallbacks = 3000,
+	ClientNetworkDeviceManagerCallbacks = 3100,
+	ClientMusicCallbacks = 3200,
+	ClientRemoteClientManagerCallbacks = 3300,
+	ClientUGCCallbacks = 3400,
+	SteamStreamClientCallbacks = 3500,
+	ClientProductBuilderCallbacks = 3600,
+	ClientShortcutsCallbacks = 3700,
+	ClientRemoteControlManagerCallbacks = 3800,
+	SteamAppListCallbacks = 3900,
+	SteamMusicCallbacks = 4000,
+	SteamMusicRemoteCallbacks = 4100,
+	ClientVRCallbacks = 4200,
+	ClientReservedCallbacks = 4300,
+	SteamReservedCallbacks = 4400,
+	SteamHTMLSurfaceCallbacks = 4500,
+	ClientVideoCallbacks = 4600
 };
 
 struct SteamServersConnected {
@@ -206,6 +231,142 @@ struct GameLobbyJoinRequested {
 	CSteamID mSteamIDFriend;
 };
 
+struct AvatarImageLoaded {
+	enum {
+		mCallback = SteamFriendsCallbacks + 34
+	};
+
+	CSteamID mSteamID;
+	int mImage;
+	int mWide;
+	int mTall;
+};
+
+struct ClanOfficerListResponse {
+	enum {
+		mCallback = SteamFriendsCallbacks + 35
+	};
+
+	CSteamID mSteamIDClan;
+	int mOfficers;
+	uint8 mSuccess;
+};
+
+struct FriendRichPresenceUpdate {
+	enum {
+		mCallback = SteamFriendsCallbacks + 36
+	};
+
+	CSteamID mSteamIDFriend;
+	AppId mAppID;
+};
+
+struct GameRichPresenceJoinRequested {
+	enum {
+		mCallback = SteamFriendsCallbacks + 37
+	};
+
+	CSteamID mSteamIDFriend;
+	char mConnect[256];
+};
+
+struct GameConnectedClanChatMsg {
+	enum {
+		mCallback = SteamFriendsCallbacks + 38
+	};
+
+	CSteamID mSteamIDClanChat;
+	CSteamID mSteamIDUser;
+	int mMessageID;
+};
+
+struct GameConnectedChatJoin {
+	enum {
+		mCallback = SteamFriendsCallbacks + 39
+	};
+
+	CSteamID mSteamIDClanChat;
+	CSteamID mSteamIDUser;
+};
+
+struct GameConnectedChatLeave {
+	enum {
+		mCallback = SteamFriendsCallbacks + 40
+	};
+
+	CSteamID mSteamIDClanChat;
+	CSteamID mSteamIDUser;
+	bool mKicked;
+	bool mDropped;
+};
+
+struct DownloadClanActivityCountsResult {
+	enum {
+		mCallback = SteamFriendsCallbacks + 41
+	};
+
+	bool mSuccess;
+};
+
+struct JoinClanChatRoomCompletionResult {
+	enum {
+		mCallback = SteamFriendsCallbacks + 42
+	};
+
+	CSteamID mSteamIDClanChat;
+	ChatRoomEnterResponse mChatRoomEnterResponse;
+};
+
+struct GameConnectedFriendChatMsg {
+	enum {
+		mCallback = SteamFriendsCallbacks + 43
+	};
+
+	CSteamID mSteamIDUser;
+	int mMessageID;
+};
+
+struct FriendsGetFollowerCount {
+	enum {
+		mCallback = SteamFriendsCallbacks + 44
+	};
+
+	Result mResult;
+	CSteamID mSteamID;
+	int mCount;
+};
+
+struct FriendsIsFollowing {
+	enum {
+		mCallback = SteamFriendsCallbacks + 45
+	};
+
+	Result mResult;
+	CSteamID mSteamID;
+	bool mIsFollowing;
+};
+
+struct FriendsEnumerateFollowingList {
+	enum {
+		mCallback = SteamFriendsCallbacks + 46
+	};
+
+	Result mResult;
+	CSteamID mSteamID[50];
+	int32 mResultsReturned;
+	int32 mTotalResultCount;
+};
+
+struct SetPersonaNameResponse {
+	enum {
+		mCallback = SteamFriendsCallbacks + 47
+	};
+
+	bool mSuccess;
+	bool mLocalSuccess;
+	Result mResult;
+};
+
 struct FavoritesListChanged {
 	enum {
 		mCallback = SteamMatchmakingCallbacks + 2
@@ -311,6 +472,23 @@ struct LobbyCreated {
 	uint64 mSteamIDLobby;
 };
 
+struct PSNGameBootInviteResult {
+	enum {
+		mCallback = SteamMatchmakingCallbacks + 15
+	};
+
+	bool mGameBootInviteExists;
+	CSteamID mSteamIDLobby;
+};
+
+struct FavoritesListAccountsUpdated {
+	enum {
+		mCallback = SteamMatchmakingCallbacks + 16
+	};
+
+	Result mResult;
+};
+
 struct IPCountry {
 	enum {
 		mCallback = SteamUtilsCallbacks + 1
@@ -339,11 +517,53 @@ struct SteamShutdown {
 	};
 };
 
+struct CheckFileSignature {
+	enum {
+		mCallback = SteamUtilsCallbacks + 5
+	};
+
+	CheckFileSignatureEnum mCheckFileSignature;
+};
+
+struct GamepadTextInputDismissed {
+	enum {
+		mCallback = SteamUtilsCallbacks + 14
+	};
+
+	bool mSubmitted;
+	uint32 mSubmittedText;
+};
+
 struct DlcInstalled {
 	enum {
 		mCallback = SteamAppsCallbacks + 5
 	};
 	AppId mAppID;
+};
+
+struct RegisterActivationCodeResponse {
+	enum {
+		mCallback = SteamAppsCallbacks + 8
+	};
+
+	RegisterActivationCodeResult mResult;
+	uint32 mPackageRegistered;
+};
+
+struct AppProofOfPurchaseKeyResponse {
+	enum {
+		mCallback = SteamAppsCallbacks + 13
+	};
+
+	Result mResult;
+	uint32 mAppID;
+	char mKey[64];
+};
+
+struct NewLaunchQueryParameters {
+	enum {
+		mCallback = SteamAppsCallbacks + 14
+	};
 };
 
 struct UserStatsReceived {
@@ -438,6 +658,33 @@ struct UserAchievementIconFetched {
 	int mIconHandle;
 };
 
+struct GlobalAchievementPercentagesReady {
+	enum {
+		mCallback = SteamUserStatsCallbacks + 10
+	};
+
+	uint64 mGameID;
+	Result mResult;
+};
+
+struct LeaderboardUGCSet {
+	enum {
+		mCallback = SteamUserStatsCallbacks + 11
+	};
+
+	Result mResult;
+	SteamLeaderboard mSteamLeaderboard;
+};
+
+struct GlobalStatsReceived {
+	enum {
+		mCallback = SteamUserStatsCallbacks + 12
+	};
+
+	uint64 mGameID;
+	Result mResult;
+};
+
 struct P2PSessionRequest {
 	enum {
 		mCallback = SteamNetworkingCallbacks + 2
@@ -526,6 +773,302 @@ struct GameStatsSessionClosed {
 	Result mResult;
 };
 
+struct RemoteStorageAppSyncedClient {
+	enum {
+		mCallback = ClientRemoteStorageCallbacks + 1
+	};
+
+	AppId mAppID;
+	Result mResult;
+	int mNumDownloads;
+};
+
+struct RemoteStorageAppSyncedServer {
+	enum {
+		mCallback = ClientRemoteStorageCallbacks + 2
+	};
+
+	AppId mAppID;
+	Result mResult;
+	int mNumUploads;
+};
+
+struct RemoteStorageAppSyncProgress {
+	enum {
+		mCallback = ClientRemoteStorageCallbacks + 3
+	};
+
+	char mCurrentFile[260];
+	AppId mAppID;
+	uint32 mBytesTransferredThisChunk;
+	double mAppPercentComplete;
+	bool mUploading;
+};
+
+struct RemoteStorageAppSyncStatusCheck {
+	enum {
+		mCallback = ClientRemoteStorageCallbacks + 5
+	};
+
+	AppId mAppID;
+	Result mResult;
+};
+
+struct RemoteStorageConflictResolution {
+	enum {
+		mCallback = ClientRemoteStorageCallbacks + 6
+	};
+
+	AppId mAppID;
+	Result mResult;
+};
+
+struct RemoteStorageFileShareResult {
+	enum {
+		mCallback = ClientRemoteStorageCallbacks + 7
+	};
+
+	Result mResult;
+	UGCHandle mFile;
+	char mFilename[260];
+};
+
+struct RemoteStoragePublishFileResult {
+	enum {
+		mCallback = ClientRemoteStorageCallbacks + 9
+	};
+
+	Result mResult;
+	PublishedFileId mPublishedFileId;
+	bool mUserNeedsToAcceptWorkshopLegalAgreement;
+};
+
+struct RemoteStorageDeletePublishedFileResult {
+	enum {
+		mCallback = ClientRemoteStorageCallbacks + 11
+	};
+
+	Result mResult;
+	PublishedFileId mPublishedFileId;
+};
+
+struct RemoteStorageEnumerateUserPublishedFilesResult {
+	enum {
+		mCallback = ClientRemoteStorageCallbacks + 12
+	};
+
+	Result mResult;
+	int32 mResultsReturned;
+	int32 mTotalResultCount;
+	PublishedFileId mPublishedFileId[50];
+};
+
+struct RemoteStorageSubscribePublishedFileResult {
+	enum {
+		mCallback = ClientRemoteStorageCallbacks + 13
+	};
+
+	Result mResult;
+	PublishedFileId mPublishedFileId;
+};
+
+struct RemoteStorageEnumerateUserSubscribedFilesResult {
+	enum {
+		mCallback = ClientRemoteStorageCallbacks + 14
+	};
+
+	Result mResult;
+	int32 mResultsReturned;
+	int32 mTotalResultCount;
+	PublishedFileId mPublishedFileId[50];
+	uint32 mTimeSubscribed[50];
+};
+
+struct RemoteStorageUnsubscribePublishedFileResult {
+	enum {
+		mCallback = ClientRemoteStorageCallbacks + 15
+	};
+
+	Result mResult;
+	PublishedFileId mPublishedFileId;
+};
+
+struct RemoteStorageUpdatePublishedFileResult {
+	enum {
+		mCallback = ClientRemoteStorageCallbacks + 16
+	};
+
+	Result mResult;
+	PublishedFileId mPublishedFileId;
+	bool mUserNeedsToAcceptWorkshopLegalAgreement;
+};
+
+struct RemoteStorageDownloadUGCResult {
+	enum {
+		mCallback = ClientRemoteStorageCallbacks + 17
+	};
+
+	Result mResult;
+	UGCHandle mFile;
+	AppId mAppID;
+	int32 mSizeInBytes;
+	char mFileName[260];
+	uint64 mSteamIDOwner;
+};
+
+struct RemoteStorageGetPublishedFileDetailsResult {
+	enum {
+		mCallback = ClientRemoteStorageCallbacks + 18
+	};
+
+	Result mResult;
+	PublishedFileId mPublishedFileId;
+	AppId mCreatorAppID;
+	AppId mConsumerAppID;
+	char mTitle[128 + 1];
+	char mDescription[8000];
+	UGCHandle mFile;
+	UGCHandle mPreviewFile;
+	uint64 mSteamIDOwner;
+	uint32 mTimeCreated;
+	uint32 mTimeUpdated;
+	RemoteStoragePublishedFileVisibility mVisibility;
+	bool mBanned;
+	char mTags[1024 + 1];
+	bool mTagsTruncated;
+	char mFileName[260];
+	int32 mFileSize;
+	int32 mPreviewFileSize;
+	char mURL[256];
+	WorkshopFileType mFileType;
+	bool mAcceptedForUse;
+};
+
+struct RemoteStorageEnumerateWorkshopFilesResult {
+	enum {
+		mCallback = ClientRemoteStorageCallbacks + 19
+	};
+
+	Result mResult;
+	int32 mResultsReturned;
+	int32 mTotalResultCount;
+	PublishedFileId mPublishedFileId[50];
+	float mScore[50];
+	AppId mAppId;
+	uint32 mStartIndex;
+};
+
+struct RemoteStorageGetPublishedItemVoteDetailsResult {
+	enum {
+		mCallback = ClientRemoteStorageCallbacks + 20
+	};
+
+	Result mResult;
+	PublishedFileId mPublishedFileId;
+	int32 mVotesFor;
+	int32 mVotesAgainst;
+	int32 mReports;
+	float mScore;
+};
+
+struct RemoteStoragePublishedFileSubscribed {
+	enum {
+		mCallback = ClientRemoteStorageCallbacks + 21
+	};
+
+	PublishedFileId mPublishedFileId;
+	AppId mAppID;
+};
+
+struct RemoteStoragePublishedFileUnsubscribed {
+	enum {
+		mCallback = ClientRemoteStorageCallbacks + 22
+	};
+
+	PublishedFileId mPublishedFileId;
+	AppId mAppID;
+};
+
+struct RemoteStoragePublishedFileDeleted {
+	enum {
+		mCallback = ClientRemoteStorageCallbacks + 23
+	};
+
+	PublishedFileId mPublishedFileId;
+	AppId mAppID;
+};
+
+struct RemoteStorageUpdateUserPublishedItemVoteResult {
+	enum {
+		mCallback = ClientRemoteStorageCallbacks + 24
+	};
+
+	Result mResult;
+	PublishedFileId mPublishedFileId;
+};
+
+struct RemoteStorageUserVoteDetails {
+	enum {
+		mCallback = ClientRemoteStorageCallbacks + 25
+	};
+
+	Result mResult;
+	PublishedFileId mPublishedFileId;
+	WorkshopVote mVote;
+};
+
+struct RemoteStorageEnumerateUserSharedWorkshopFilesResult {
+	enum {
+		mCallback = ClientRemoteStorageCallbacks + 26
+	};
+
+	Result mResult;
+	int32 mResultsReturned;
+	int32 mTotalResultCount;
+	PublishedFileId mPublishedFileId[50];
+};
+
+struct RemoteStorageSetUserPublishedFileActionResult {
+	enum {
+		mCallback = ClientRemoteStorageCallbacks + 27
+	};
+
+	Result mResult;
+	PublishedFileId mPublishedFileId;
+	WorkshopFileAction mAction;
+};
+
+struct RemoteStorageEnumeratePublishedFilesByUserActionResult {
+	enum {
+		mCallback = ClientRemoteStorageCallbacks + 28
+	};
+
+	Result mResult;
+	WorkshopFileAction mAction;
+	int32 mResultsReturned;
+	int32 mTotalResultCount;
+	PublishedFileId mPublishedFileId[50];
+	uint32 mTimeUpdated[50];
+};
+
+struct RemoteStoragePublishFileProgress {
+	enum {
+		mCallback = ClientRemoteStorageCallbacks + 29
+	};
+
+	double mPercentFile;
+	bool mPreview;
+};
+
+struct RemoteStoragePublishedFileUpdated {
+	enum {
+		mCallback = ClientRemoteStorageCallbacks + 30
+	};
+
+	PublishedFileId mPublishedFileId;
+	AppId mAppID;
+	UGCHandle mFile;
+};
 
 #pragma pack(pop)
 
@@ -541,6 +1084,14 @@ public:
 	virtual int GetCallbackSizeBytes() = 0;
 	int GetICallback() {
 		return mCallback;
+	}
+
+	bool IsRegistered() {
+		return (mCallbackFlags & CallbackFlagsRegistered);
+	}
+
+	void ToggleRegistered() {
+		mCallbackFlags ^= CallbackFlagsRegistered;
 	}
 
 protected:

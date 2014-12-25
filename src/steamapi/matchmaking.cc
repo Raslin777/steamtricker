@@ -107,6 +107,13 @@ void CSteamMatchmaking::AddRequestLobbyListResultCountFilter(int maxResults)
 		maxResults);
 }
 
+void CSteamMatchmaking::AddRequestLobbyListCompatibleMembersFilter(CSteamID steamIDLobby)
+{
+	STUB();
+	METHOD_FORWARD_AND_FINISH_IF_ENABLED(SteamMatchmaking, AddRequestLobbyListCompatibleMembersFilter,
+	                                     steamIDLobby);
+}
+
 CSteamID CSteamMatchmaking::GetLobbyByIndex(int lobby)
 {
 	STUB();
@@ -344,6 +351,15 @@ bool CSteamMatchmaking::SetLobbyOwner(CSteamID steamIDLobby,
 	return true;
 }
 
+bool CSteamMatchmaking::SetLinkedLobby(
+        CSteamID steamIDLobby,
+        CSteamID steamIDLobbyDependent)
+{
+	STUB();
+	METHOD_FORWARD_AND_FINISH_IF_ENABLED(SteamMatchmaking, SetLinkedLobby,
+					     steamIDLobby, steamIDLobbyDependent);
+	return true;
+}
 
 ServerListRequest CSteamMatchmakingServers::RequestInternetServerList(
 		AppId app,

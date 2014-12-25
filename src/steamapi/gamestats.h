@@ -3,6 +3,10 @@
 
 #include "types.h"
 
+/*
+FIXME: this doesn't seem to be used anywhere
+*/
+
 class ISteamGameStats {
 public:
 	virtual SteamAPICall GetNewSession(int8 accountType,

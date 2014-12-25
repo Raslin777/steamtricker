@@ -212,6 +212,14 @@ ISteamRemoteStorage *CSteamClient::GetISteamRemoteStorage(
 	return static_cast<ISteamRemoteStorage*>(&CSteamRemoteStorage::getInstance());
 }
 
+ISteamScreenshots *CSteamClient::GetISteamScreenshots(SteamUserId steamuser,
+		SteamPipeId steamPipe,
+		const char *version)
+{
+	STUB();
+	return static_cast<ISteamScreenshots*>(&CSteamScreenshots::getInstance());
+}
+
 void CSteamClient::RunFrame()
 {
 	STUB();
@@ -230,5 +238,104 @@ void CSteamClient::SetWarningMessageHook(SteamAPIWarningMessageHook function)
 	STUB();
 	METHOD_FORWARD_AND_FINISH_IF_ENABLED(SteamClient, SetWarningMessageHook,
 					     function);
+}
+
+bool CSteamClient::BShutdownIfAllPipesClosed()
+{
+	STUB();
+	return true;
+}
+
+ISteamHTTP *CSteamClient::GetISteamHTTP(
+		SteamUserId steamuser,
+		SteamPipeId steamPipe,
+		const char *version )
+{
+	STUB();
+	return static_cast<ISteamHTTP*>(&CSteamHTTP::getInstance());
+}
+
+ISteamUnifiedMessages *CSteamClient::GetISteamUnifiedMessages(
+		SteamUserId steamuser,
+		SteamPipeId steamPipe,
+		const char *version)
+{
+	STUB();
+	return static_cast<ISteamUnifiedMessages*>(&CSteamUnifiedMessages::getInstance());
+}
+
+ISteamController *CSteamClient::GetISteamController(
+		SteamUserId steamUser,
+		SteamPipeId steamPipe,
+		const char *version)
+{
+	STUB();
+	return static_cast<ISteamController*>(&CSteamController::getInstance());
+}
+
+ISteamUGC *CSteamClient::GetISteamUGC(
+		SteamUserId steamUser,
+		SteamPipeId steamPipe,
+		const char *version)
+{
+	STUB();
+	return static_cast<ISteamUGC*>(&CSteamUGC::getInstance());
+}
+
+ISteamAppList *CSteamClient::GetISteamAppList(
+		SteamUserId steamUser,
+		SteamPipeId steamPipe,
+		const char *version)
+{
+	STUB();
+	return static_cast<ISteamAppList*>(&CSteamAppList::getInstance());
+}
+
+ISteamMusic *CSteamClient::GetISteamMusic(
+		SteamUserId steamuser,
+		SteamPipeId steamPipe,
+		const char *version)
+{
+	STUB();
+	return static_cast<ISteamMusic*>(&CSteamMusic::getInstance());
+}
+
+ISteamMusicRemote *CSteamClient::GetISteamMusicRemote(
+		SteamUserId steamuser,
+		SteamPipeId steamPipe,
+		const char *version)
+{
+	STUB();
+	return static_cast<ISteamMusicRemote*>(&CSteamMusicRemote::getInstance());
+}
+
+ISteamHTMLSurface *CSteamClient::GetISteamHTMLSurface(
+		SteamUserId steamuser,
+		SteamPipeId steamPipe,
+		const char *version)
+{
+	STUB();
+	return static_cast<ISteamHTMLSurface*>(&CSteamHTMLSurface::getInstance());
+}
+
+void CSteamClient::Set_SteamAPI_CPostAPIResultInProcess(
+		SteamAPI_PostAPIResultInProcess func)
+{
+	STUB();
+	METHOD_FORWARD_AND_FINISH_IF_ENABLED(SteamClient, Set_SteamAPI_CPostAPIResultInProcess);
+}
+
+void CSteamClient::Remove_SteamAPI_CPostAPIResultInProcess(
+		SteamAPI_PostAPIResultInProcess func)
+{
+	STUB();
+	METHOD_FORWARD_AND_FINISH_IF_ENABLED(SteamClient, Remove_SteamAPI_CPostAPIResultInProcess);
+}
+
+void CSteamClient::Set_SteamAPI_CCheckCallbackRegisteredInProcess(
+		SteamAPI_CheckCallbackRegistered func)
+{
+	STUB();
+	METHOD_FORWARD_AND_FINISH_IF_ENABLED(SteamClient, Set_SteamAPI_CCheckCallbackRegisteredInProcess);
 }
 

@@ -152,6 +152,79 @@ SteamRemoteStorage()
 	return SteamAPI::SteamRemoteStorage();
 }
 
+__STEAMAPI ISteamScreenshots *
+SteamScreenshots()
+{
+	STUB();
+	REAL_CLASS_IF_IN_REAL_CALL(SteamScreenshots);
+	return SteamAPI::SteamScreenshots();
+}
+
+__STEAMAPI ISteamHTTP *
+SteamHTTP()
+{
+	STUB();
+	REAL_CLASS_IF_IN_REAL_CALL(SteamHTTP);
+	return SteamAPI::SteamHTTP();
+}
+
+__STEAMAPI ISteamUnifiedMessages *
+SteamUnifiedMessages()
+{
+	STUB();
+	REAL_CLASS_IF_IN_REAL_CALL(SteamUnifiedMessages);
+	return SteamAPI::SteamUnifiedMessages();
+}
+
+__STEAMAPI ISteamController *
+SteamController()
+{
+	STUB();
+	REAL_CLASS_IF_IN_REAL_CALL(SteamController);
+	return SteamAPI::SteamController();
+}
+
+__STEAMAPI ISteamUGC *
+SteamUGC()
+{
+	STUB();
+	REAL_CLASS_IF_IN_REAL_CALL(SteamUGC);
+	return SteamAPI::SteamUGC();
+}
+
+__STEAMAPI ISteamAppList *
+SteamAppList()
+{
+	STUB();
+	REAL_CLASS_IF_IN_REAL_CALL(SteamAppList);
+	return SteamAPI::SteamAppList();
+}
+
+__STEAMAPI ISteamMusic *
+SteamMusic()
+{
+	STUB();
+	REAL_CLASS_IF_IN_REAL_CALL(SteamMusic);
+	return SteamAPI::SteamMusic();
+}
+
+__STEAMAPI ISteamMusicRemote *
+SteamMusicRemote()
+{
+	STUB();
+	REAL_CLASS_IF_IN_REAL_CALL(SteamMusicRemote);
+	return SteamAPI::SteamMusicRemote();
+}
+
+__STEAMAPI ISteamHTMLSurface *
+SteamHTMLSurface()
+{
+	STUB();
+	REAL_CLASS_IF_IN_REAL_CALL(SteamHTMLSurface);
+	return SteamAPI::SteamHTMLSurface();
+}
+
+
 class CallbackBase *lastCallback = NULL;
 
 __STEAMAPI void
@@ -168,6 +241,8 @@ SteamAPI_RegisterCallback(class CallbackBase *callback, int iCallback)
 	STUB();
 	FUNCTION_FORWARD_AND_FINISH_IF_ENABLED(SteamAPI_RegisterCallback,
 					       callback, iCallback);
+	if(!callback->IsRegistered())
+		callback->ToggleRegistered();
 }
 
 __STEAMAPI void
@@ -176,6 +251,8 @@ SteamAPI_UnregisterCallback(class CallbackBase *callback)
 	STUB();
 	FUNCTION_FORWARD_AND_FINISH_IF_ENABLED(SteamAPI_UnregisterCallback,
 					       callback);
+	if(callback->IsRegistered())
+		callback->ToggleRegistered();
 }
 
 __STEAMAPI void
@@ -232,14 +309,6 @@ SteamAPI_GetSteamInstallPath()
 	return NULL;
 }
 
-__STEAMAPI SteamPipeId
-SteamAPI_GetHSteamPipe()
-{
-	STUB();
-	FUNCTION_FORWARD_AND_FINISH_IF_ENABLED(SteamAPI_GetHSteamPipe);
-	return 0;
-}
-
 __STEAMAPI void
 SteamAPI_SetTryCatchCallbacks(bool tryCatchCallbacks)
 {
@@ -249,11 +318,21 @@ SteamAPI_SetTryCatchCallbacks(bool tryCatchCallbacks)
 }
 
 __STEAMAPI SteamPipeId
+SteamAPI_GetHSteamPipe()
+{
+	STUB();
+	FUNCTION_FORWARD_AND_FINISH_IF_ENABLED(SteamAPI_GetHSteamPipe);
+	/* Apparently returns 1 for whatever reason */
+	return 1;
+}
+
+__STEAMAPI SteamPipeId
 GetHSteamPipe()
 {
 	STUB();
 	FUNCTION_FORWARD_AND_FINISH_IF_ENABLED(GetHSteamPipe);
-	return 0;
+	/* Apparently returns 1 for whatever reason */
+	return 1;
 }
 
 __STEAMAPI SteamUserId
@@ -261,7 +340,8 @@ GetHSteamUser()
 {
 	STUB();
 	FUNCTION_FORWARD_AND_FINISH_IF_ENABLED(GetHSteamUser);
-	return 0;
+	/* Apparently returns 1 for whatever reason */
+	return 1;
 }
 
 __STEAMAPI SteamUserId
@@ -269,7 +349,8 @@ SteamAPI_GetHSteamUser()
 {
 	STUB();
 	FUNCTION_FORWARD_AND_FINISH_IF_ENABLED(SteamAPI_GetHSteamUser);
-	return 0;
+	/* Apparently returns 1 for whatever reason */
+	return 1;
 }
 
 #if GAMESERVER_API
@@ -415,6 +496,15 @@ SteamAPI::hookInit()
 	REGISTER_HOOK(SteamNetworking, ISteamNetworking* (*)());
 	REGISTER_HOOK(SteamMatchmakingServers, ISteamMatchmakingServers* (*)());
 	REGISTER_HOOK(SteamRemoteStorage, ISteamRemoteStorage* (*)());
+	REGISTER_HOOK(SteamScreenshots, ISteamScreenshots* (*)());
+	REGISTER_HOOK(SteamHTTP, ISteamHTTP* (*)());
+	REGISTER_HOOK(SteamUnifiedMessages, ISteamUnifiedMessages* (*)());
+	REGISTER_HOOK(SteamController, ISteamController* (*)());
+	REGISTER_HOOK(SteamUGC, ISteamUGC* (*)());
+	REGISTER_HOOK(SteamAppList, ISteamAppList* (*)());
+	REGISTER_HOOK(SteamMusic, ISteamMusic* (*)());
+	REGISTER_HOOK(SteamMusicRemote, ISteamMusicRemote* (*)());
+	REGISTER_HOOK(SteamHTMLSurface, ISteamHTMLSurface* (*)());
 	REGISTER_HOOK(SteamAPI_RunCallbacks, void (*)());
 	REGISTER_HOOK(SteamAPI_RegisterCallback, void (*)(class CallbackBase*, int));
 	REGISTER_HOOK(SteamAPI_UnregisterCallback, void (*)(class CallbackBase*));
@@ -538,6 +628,70 @@ SteamAPI::SteamRemoteStorage()
 		&CSteamRemoteStorage::getInstance());
 }
 
+ISteamScreenshots *
+SteamAPI::SteamScreenshots()
+{
+	return static_cast<ISteamScreenshots*>(
+		&CSteamScreenshots::getInstance());
+}
+
+ISteamHTTP *
+SteamAPI::SteamHTTP()
+{
+	return static_cast<ISteamHTTP*>(
+		&CSteamHTTP::getInstance());
+}
+
+ISteamUnifiedMessages *
+SteamAPI::SteamUnifiedMessages()
+{
+	return static_cast<ISteamUnifiedMessages*>(
+		&CSteamUnifiedMessages::getInstance());
+}
+
+ISteamController *
+SteamAPI::SteamController()
+{
+	return static_cast<ISteamController*>(
+		&CSteamController::getInstance());
+}
+
+ISteamUGC *
+SteamAPI::SteamUGC()
+{
+	return static_cast<ISteamUGC*>(
+		&CSteamUGC::getInstance());
+}
+
+ISteamAppList *
+SteamAPI::SteamAppList()
+{
+	return static_cast<ISteamAppList*>(
+		&CSteamAppList::getInstance());
+}
+
+ISteamMusic *
+SteamAPI::SteamMusic()
+{
+	return static_cast<ISteamMusic*>(
+		&CSteamMusic::getInstance());
+}
+
+ISteamMusicRemote *
+SteamAPI::SteamMusicRemote()
+{
+	return static_cast<ISteamMusicRemote*>(
+		&CSteamMusicRemote::getInstance());
+}
+
+ISteamHTMLSurface *
+SteamAPI::SteamHTMLSurface()
+{
+	return static_cast<ISteamHTMLSurface*>(
+		&CSteamHTMLSurface::getInstance());
+}
+
 SteamAPI::RealSteamAPI SteamAPI::real;
 
 int SteamAPIRealCounter::mCounter = 0;
+std::clock_t SteamAPI::start = std::clock();

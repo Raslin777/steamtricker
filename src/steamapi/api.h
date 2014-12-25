@@ -1,6 +1,9 @@
 #ifndef STEAMTRICKER_STEAMAPI_API_H_
 #define STEAMTRICKER_STEAMAPI_API_H_
 
+#include <stdio.h>
+#include <ctime>
+
 #include "types.h"
 
 #include "client.h"
@@ -22,10 +25,18 @@
 			.version = -1 \
 		}; \
 		struct hooked_symbol * sym = register_hook(&h); \
-		SteamAPI::real.FUNC = reinterpret_cast< TYPE >(sym->symbol_handle); \
+		if (sym) \
+			SteamAPI::real.FUNC = reinterpret_cast< TYPE >(sym->symbol_handle); \
 	}
 
-#define USE_STEAM_LIB
+#define STEAMAPI_TIME ((int)((std::clock() - SteamAPI::start) / (double)(CLOCKS_PER_SEC / 1000)))
+
+#define STUB() \
+	if(!SteamAPIRealCounter::isInReal()) { \
+		fprintf(stderr, "[SteamAPI][%d][STUB] %s\n", STEAMAPI_TIME, __PRETTY_FUNCTION__); \
+	}
+#define LOG(FORMAT, ...) { fprintf(stderr, "[SteamAPI][%d] " FORMAT "\n", STEAMAPI_TIME, __VA_ARGS__); }
+
 #ifdef USE_STEAM_LIB
 #define FUNCTION_FORWARD_AND_FINISH_IF_ENABLED(FUNC, ...) { \
 	SteamAPIRealCounter ___steamAPIRealCounter; \
@@ -92,6 +103,24 @@ public:
 
 	static ISteamRemoteStorage * SteamRemoteStorage();
 
+	static ISteamScreenshots* SteamScreenshots();
+
+	static ISteamHTTP* SteamHTTP();
+
+	static ISteamUnifiedMessages* SteamUnifiedMessages();
+
+	static ISteamController* SteamController();
+
+	static ISteamUGC* SteamUGC();
+
+	static ISteamAppList* SteamAppList();
+
+	static ISteamMusic* SteamMusic();
+
+	static ISteamMusicRemote* SteamMusicRemote();
+
+	static ISteamHTMLSurface* SteamHTMLSurface();
+
 	struct RealSteamAPI {
 		bool (*SteamAPI_Init)();
 		void (*SteamAPI_Shutdown)();
@@ -111,6 +140,15 @@ public:
 		ISteamNetworking* (*SteamNetworking)();
 		ISteamMatchmakingServers* (*SteamMatchmakingServers)();
 		ISteamRemoteStorage* (*SteamRemoteStorage)();
+		ISteamScreenshots* (*SteamScreenshots)();
+		ISteamHTTP* (*SteamHTTP)();
+		ISteamUnifiedMessages* (*SteamUnifiedMessages)();
+		ISteamController* (*SteamController)();
+		ISteamUGC* (*SteamUGC)();
+		ISteamAppList* (*SteamAppList)();
+		ISteamMusic* (*SteamMusic)();
+		ISteamMusicRemote* (*SteamMusicRemote)();
+		ISteamHTMLSurface* (*SteamHTMLSurface)();
 		void (*SteamAPI_RunCallbacks)();
 		void (*SteamAPI_RegisterCallback)(class CallbackBase*, int);
 		void (*SteamAPI_UnregisterCallback)(class CallbackBase*);
@@ -141,6 +179,8 @@ public:
 	};
 
 	static RealSteamAPI real;
+
+	static std::clock_t start;
 };
 
 #endif /* STEAMTRICKER_STEAMAPI_API_H_ */

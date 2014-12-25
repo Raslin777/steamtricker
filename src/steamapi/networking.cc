@@ -52,12 +52,30 @@ bool CSteamNetworking::CloseP2PSessionWithUser(CSteamID steamIDRemote)
 	return true;
 }
 
+bool CSteamNetworking::CloseP2PChannelWithUser(
+        CSteamID steamIDRemote,
+        int channel)
+{
+	STUB();
+	METHOD_FORWARD_AND_FINISH_IF_ENABLED(SteamNetworking, CloseP2PChannelWithUser,
+					     steamIDRemote, channel);
+	return false;
+}
+
 bool CSteamNetworking::GetP2PSessionState(CSteamID steamIDRemote,
 					  P2PSessionState *connectionState)
 {
 	STUB();
 	METHOD_FORWARD_AND_FINISH_IF_ENABLED(SteamNetworking, GetP2PSessionState,
 					     steamIDRemote, connectionState);
+	return false;
+}
+
+bool CSteamNetworking::AllowP2PPacketRelay(bool allow)
+{
+	STUB();
+	METHOD_FORWARD_AND_FINISH_IF_ENABLED(SteamNetworking, AllowP2PPacketRelay,
+					     allow);
 	return false;
 }
 

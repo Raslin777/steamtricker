@@ -118,6 +118,13 @@ VoiceResult CSteamUser::DecompressVoice(const void *compressed,
 	return VoiceResultNoData;
 }
 
+uint32 CSteamUser::GetVoiceOptimalSampleRate()
+{
+	STUB();
+	METHOD_FORWARD_AND_FINISH_IF_ENABLED(SteamUser, GetVoiceOptimalSampleRate);
+	return 0;
+}
+
 AuthTicket CSteamUser::GetAuthSessionTicket(void *ticket,
 					    int maxTicket,
 					    uint32 *ticketCount)
@@ -161,4 +168,60 @@ UserHasLicenseForAppResult CSteamUser::UserHasLicenseForApp(CSteamID steamID,
 					     steamID, appID);
 	return UserHasLicenseResultHasLicense;
 }
+
+bool CSteamUser::BIsBehindNAT()
+{
+	STUB();
+	METHOD_FORWARD_AND_FINISH_IF_ENABLED(SteamUser, BIsBehindNAT);
+	return true;
+}
+
+void CSteamUser::AdvertiseGame(
+		CSteamID steamIDGameServer,
+		uint32 IPServer,
+		uint16 portServer)
+{
+	STUB();
+	METHOD_FORWARD_AND_FINISH_IF_ENABLED(SteamUser, AdvertiseGame,
+			steamIDGameServer, IPServer, portServer);
+}
+
+SteamAPICall CSteamUser::RequestEncryptedAppTicket(
+		void *dataToInclude,
+		int dataToIncludei)
+{
+	STUB();
+	METHOD_FORWARD_AND_FINISH_IF_ENABLED(SteamUser, RequestEncryptedAppTicket,
+			dataToInclude, dataToIncludei);
+	return SteamAPICallInvalid;
+}
+
+bool CSteamUser::GetEncryptedAppTicket(
+		void *ticket,
+		int maxTicket,
+		uint32 *ticketi)
+{
+	STUB();
+	METHOD_FORWARD_AND_FINISH_IF_ENABLED(SteamUser, GetEncryptedAppTicket,
+			ticket, maxTicket, ticketi);
+	return false;
+}
+
+int CSteamUser::GetGameBadgeLevel(
+		int series,
+		bool foil)
+{
+	STUB();
+	METHOD_FORWARD_AND_FINISH_IF_ENABLED(SteamUser, GetGameBadgeLevel,
+			series, foil);
+	return 0;
+}
+
+int CSteamUser::GetPlayerSteamLevel()
+{
+	STUB();
+	METHOD_FORWARD_AND_FINISH_IF_ENABLED(SteamUser, GetPlayerSteamLevel);
+	return 1;
+}
+
 

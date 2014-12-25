@@ -3,6 +3,9 @@
 
 #include "types.h"
 
+/**
+ * interface for SteamUtils version 007
+ */
 class ISteamUtils {
 public:
 	virtual uint32 GetSecondsSinceAppActive() = 0;
@@ -46,6 +49,22 @@ public:
 	virtual bool IsOverlayEnabled() = 0;
 
 	virtual bool BOverlayNeedsPresent() = 0;
+
+	virtual bool ShowGamepadTextInput(
+			GamepadTextInputMode inputMode,
+			GamepadTextInputLineMode lineInputMode,
+			const char *description,
+			uint32 charMax,
+			const char *existingText) = 0;
+
+	virtual uint32 GetEnteredGamepadTextLength() = 0;
+
+	virtual bool GetEnteredGamepadTextInput(
+			char *text, uint32 texti) = 0;
+
+	virtual const char *GetSteamUILanguage() = 0;
+
+	virtual bool IsSteamRunningInVR() = 0;
 };
 
 class CSteamUtils : public ISteamUtils {
@@ -95,6 +114,22 @@ public:
 	bool IsOverlayEnabled();
 
 	bool BOverlayNeedsPresent();
+
+	bool ShowGamepadTextInput(
+			GamepadTextInputMode inputMode,
+			GamepadTextInputLineMode lineInputMode,
+			const char *description,
+			uint32 charMax,
+			const char *existingText);
+
+	uint32 GetEnteredGamepadTextLength();
+
+	bool GetEnteredGamepadTextInput(
+			char *text, uint32 texti);
+
+	const char *GetSteamUILanguage();
+
+	bool IsSteamRunningInVR();
 };
 
 #endif /* STEAMTRICKER_STEAMAPI_UTILS_H_ */

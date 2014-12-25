@@ -14,6 +14,9 @@
 
 #include "types.h"
 
+/**
+ * interface for SteamClient version 016
+ */
 class ISteamClient {
 public:
 	virtual SteamPipeId CreateSteamPipe() = 0;
@@ -46,6 +49,7 @@ public:
 						SteamPipeId steamPipe,
 						const char *version) = 0;
 
+    //FIXME
 	virtual ISteamMasterServerUpdater *GetISteamMasterServerUpdater(
 		SteamUserId steamUser,
 		SteamPipeId steamPipe,
@@ -80,11 +84,55 @@ public:
 						    SteamPipeId steamPipe,
 						    const char *version) = 0;
 
+	virtual ISteamScreenshots *GetISteamScreenshots(SteamUserId steamuser,
+													SteamPipeId steamPipe,
+													const char *version) = 0;
+
 	virtual void RunFrame() = 0;
 
 	virtual uint32 GetIPCCallCount() = 0;
 
 	virtual void SetWarningMessageHook(SteamAPIWarningMessageHook function) = 0;
+
+	virtual bool BShutdownIfAllPipesClosed() = 0;
+
+	virtual ISteamHTTP *GetISteamHTTP(SteamUserId steamuser,
+									  SteamPipeId steamPipe,
+									  const char *version ) = 0;
+
+	virtual ISteamUnifiedMessages *GetISteamUnifiedMessages(SteamUserId steamuser,
+															SteamPipeId steamPipe,
+															const char *version ) = 0;
+
+	virtual ISteamController *GetISteamController(SteamUserId steamUser,
+												  SteamPipeId steamPipe,
+												  const char *version ) = 0;
+
+	virtual ISteamUGC *GetISteamUGC(SteamUserId steamUser,
+									SteamPipeId steamPipe,
+									const char *version ) = 0;
+
+	virtual ISteamAppList *GetISteamAppList(SteamUserId steamUser,
+											SteamPipeId steamPipe,
+											const char *version) = 0;
+
+	virtual ISteamMusic *GetISteamMusic(SteamUserId steamuser,
+										SteamPipeId steamPipe,
+										const char *version) = 0;
+
+	virtual ISteamMusicRemote *GetISteamMusicRemote(SteamUserId steamuser,
+													SteamPipeId steamPipe,
+													const char *version) = 0;
+
+	virtual ISteamHTMLSurface *GetISteamHTMLSurface(SteamUserId steamuser,
+													SteamPipeId steamPipe,
+													const char *version) = 0;
+
+	virtual void Set_SteamAPI_CPostAPIResultInProcess(SteamAPI_PostAPIResultInProcess func) = 0;
+
+	virtual void Remove_SteamAPI_CPostAPIResultInProcess(SteamAPI_PostAPIResultInProcess func) = 0;
+
+	virtual void Set_SteamAPI_CCheckCallbackRegisteredInProcess(SteamAPI_CheckCallbackRegistered func) = 0;
 
 };
 
@@ -159,11 +207,55 @@ public:
 						    SteamPipeId steamPipe,
 						    const char *version);
 
+	ISteamScreenshots *GetISteamScreenshots(SteamUserId steamuser,
+											SteamPipeId steamPipe,
+											const char *version);
+
 	void RunFrame();
 
 	uint32 GetIPCCallCount();
 
 	void SetWarningMessageHook(SteamAPIWarningMessageHook function);
+
+	bool BShutdownIfAllPipesClosed();
+
+	ISteamHTTP *GetISteamHTTP(SteamUserId steamuser,
+							  SteamPipeId steamPipe,
+							  const char *version );
+
+	ISteamUnifiedMessages *GetISteamUnifiedMessages(SteamUserId steamuser,
+													SteamPipeId steamPipe,
+													const char *version);
+
+	ISteamController *GetISteamController(SteamUserId steamUser,
+										  SteamPipeId steamPipe,
+										  const char *version);
+
+	ISteamUGC *GetISteamUGC(SteamUserId steamUser,
+							SteamPipeId steamPipe,
+							const char *version);
+
+	ISteamAppList *GetISteamAppList(SteamUserId steamUser,
+									SteamPipeId steamPipe,
+									const char *version);
+
+	ISteamMusic *GetISteamMusic(SteamUserId steamuser,
+								SteamPipeId steamPipe,
+								const char *version);
+
+	ISteamMusicRemote *GetISteamMusicRemote(SteamUserId steamuser,
+											SteamPipeId steamPipe,
+											const char *version);
+
+	ISteamHTMLSurface *GetISteamHTMLSurface(SteamUserId steamuser,
+											SteamPipeId steamPipe,
+											const char *version);
+
+	void Set_SteamAPI_CPostAPIResultInProcess(SteamAPI_PostAPIResultInProcess func);
+
+	void Remove_SteamAPI_CPostAPIResultInProcess(SteamAPI_PostAPIResultInProcess func);
+
+	void Set_SteamAPI_CCheckCallbackRegisteredInProcess(SteamAPI_CheckCallbackRegistered func);
 
 };
 

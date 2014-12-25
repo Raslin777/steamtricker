@@ -153,3 +153,46 @@ bool CSteamUtils::BOverlayNeedsPresent()
 	return false;
 }
 
+bool CSteamUtils::ShowGamepadTextInput(
+		GamepadTextInputMode inputMode,
+		GamepadTextInputLineMode lineInputMode,
+		const char *description,
+		uint32 charMax,
+		const char *existingText)
+{
+	STUB();
+	METHOD_FORWARD_AND_FINISH_IF_ENABLED(SteamUtils, ShowGamepadTextInput,
+			inputMode, lineInputMode, description, charMax, existingText);
+	return false;
+}
+
+uint32 CSteamUtils::GetEnteredGamepadTextLength()
+{
+	STUB();
+	METHOD_FORWARD_AND_FINISH_IF_ENABLED(SteamUtils, GetEnteredGamepadTextLength);
+	return 0;
+}
+
+bool CSteamUtils::GetEnteredGamepadTextInput(
+		char *text, uint32 texti)
+{
+	STUB();
+	METHOD_FORWARD_AND_FINISH_IF_ENABLED(SteamUtils, GetEnteredGamepadTextInput,
+			text, texti);
+	return false;
+}
+
+const char *CSteamUtils::GetSteamUILanguage()
+{
+	STUB();
+	METHOD_FORWARD_AND_FINISH_IF_ENABLED(SteamUtils, GetSteamUILanguage);
+	return "Steam UI Language";
+}
+
+bool CSteamUtils::IsSteamRunningInVR()
+{
+	STUB();
+	METHOD_FORWARD_AND_FINISH_IF_ENABLED(SteamUtils, IsSteamRunningInVR);
+	return false;
+}
+

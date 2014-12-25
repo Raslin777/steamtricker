@@ -15,6 +15,10 @@
 #include "matchmaking.h"
 #include "networking.h"
 #include "userstats.h"
+#include "screenshots.h"
+#include "controller.h"
+#include "unifiedmessages.h"
+#include "applist.h"
 
 #define STRINGIFY(x) #x
 #define REGISTER_HOOK(FUNC, TYPE) { \

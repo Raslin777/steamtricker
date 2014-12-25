@@ -11,6 +11,10 @@
 #include "user.h"
 #include "userstats.h"
 #include "utils.h"
+#include "screenshots.h"
+#include "controller.h"
+#include "unifiedmessages.h"
+#include "applist.h"
 
 #include "types.h"
 

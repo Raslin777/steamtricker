@@ -13,14 +13,6 @@
 // FIXME
 // FIXME
 // FIXME
-class ISteamScreenshots{};
-class CSteamScreenshots : public ISteamScreenshots {
-  public:
-	static CSteamScreenshots& getInstance() {
-		static CSteamScreenshots instance;
-		return instance;
-	}
-};
 class ISteamHTTP{};
 class CSteamHTTP : public ISteamHTTP {
   public:
@@ -29,35 +21,11 @@ class CSteamHTTP : public ISteamHTTP {
 		return instance;
 	}
 };
-class ISteamUnifiedMessages{};
-class CSteamUnifiedMessages : public ISteamUnifiedMessages {
-  public:
-	static CSteamUnifiedMessages& getInstance() {
-		static CSteamUnifiedMessages instance;
-		return instance;
-	}
-};
-class ISteamController{};
-class CSteamController : public ISteamController {
-  public:
-	static CSteamController& getInstance() {
-		static CSteamController instance;
-		return instance;
-	}
-};
 class ISteamUGC{};
 class CSteamUGC : public ISteamUGC {
   public:
 	static CSteamUGC& getInstance() {
 		static CSteamUGC instance;
-		return instance;
-	}
-};
-class ISteamAppList{};
-class CSteamAppList : public ISteamAppList {
-  public:
-	static CSteamAppList& getInstance() {
-		static CSteamAppList instance;
 		return instance;
 	}
 };
@@ -112,6 +80,8 @@ typedef uint64 UGCFileWriteStreamHandle;
 typedef uint64 PublishedFileId;
 typedef uint64 PublishedFileUpdateHandle;
 typedef uint32 DepotId;
+typedef uint32 ScreenshotHandle;
+typedef uint64 ClientUnifiedMessageHandle;
 
 typedef int ServerQuery;
 typedef void* ServerListRequest;
@@ -121,6 +91,8 @@ const UGCFileWriteStreamHandle UGCFileStreamHandleInvalid = -1;
 const UGCHandle UGCHandleInvalid = -1;
 const PublishedFileUpdateHandle PublishedFileUpdateHandleInvalid = -1;
 const AppId AppIdInvalid = 0;
+const ScreenshotHandle ScreenshotHandleInvalid = 0;
+const ClientUnifiedMessageHandle UnifiedMessageHandleInvalid = 0;
 
 extern "C" typedef void (*SteamAPIWarningMessageHook)(int, const char *);
 extern "C" typedef void (*SteamAPI_PostAPIResultInProcess)(SteamAPICall callHandle,
@@ -653,6 +625,11 @@ enum CheckFileSignatureEnum {
 	CheckFileSignatureNoSignaturesFoundForThisFile = 4,
 };
 
+enum SteamControllerPad {
+	SteamControllerPad_Left,
+	SteamControllerPad_Right
+};
+
 const int SteamAccountInstanceMask = 0x000FFFFF;
 enum ChatSteamIDInstanceFlags {
 	ChatAccountInstanceMask = 0x00000FFF,
@@ -1091,6 +1068,15 @@ private:
 		uint64 mGameIDAll;
 		GameID mGameID;
 	};
+};
+
+struct SteamControllerState {
+	uint32 mPacketNum;
+	uint64 mButtons;
+	short mLeftPadX;
+	short mLeftPadY;
+	short mRightPadX;
+	short mRightPadY;
 };
 #pragma pack(pop)
 

@@ -1070,6 +1070,37 @@ struct RemoteStoragePublishedFileUpdated {
 	UGCHandle mFile;
 };
 
+struct ScreenshotReady {
+	enum {
+		mCallback = SteamScreenshotsCallbacks + 1
+	};
+
+	ScreenshotHandle mLocal;
+	Result mResult;
+};
+
+struct ScreenshotRequested {
+	enum {
+		mCallback = SteamScreenshotsCallbacks + 2
+	};
+};
+
+struct SteamAppInstalled {
+	enum {
+		mCallback = SteamAppListCallbacks + 1
+	};
+
+	AppId mAppID;
+};
+
+struct SteamAppUninstalled {
+	enum {
+		mCallback = SteamAppListCallbacks + 2
+	};
+
+	AppId mAppID;
+};
+
 #pragma pack(pop)
 
 class CallbackBase {
